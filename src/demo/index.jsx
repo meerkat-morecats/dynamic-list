@@ -9,7 +9,7 @@ class Demo extends React.Component {
   render() {
     const dataSource = [];
 
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000; i++) {
       dataSource.push({
         title: `标题--${i}`,
         content: `内容内容内容内容内容内容内容内容内容内容内容内容`
@@ -30,7 +30,9 @@ class Demo extends React.Component {
       >
         <DynamicList>
           {dataSource.map((item, index) => (
-            <DListItem key={index}>{item.title}</DListItem>
+            <DListItem style={{ height: Math.random() * 100 }} key={index}>
+              {item.title}
+            </DListItem>
           ))}
         </DynamicList>
       </div>

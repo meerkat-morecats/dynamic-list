@@ -16,7 +16,7 @@ import { renderItem } from "./Item";
 class DynamicList extends React.Component {
   state = {
     test: null,
-    paddingTop: 110,
+    paddingTop: 0,
     paddingBottom: 0,
     startIndex: 0
   };
@@ -27,7 +27,7 @@ class DynamicList extends React.Component {
     this.outerRef = undefined;
     this.innerRef1 = undefined;
     this.innerRef2 = undefined;
-
+    this.heightList = [];
     this.midRef = undefined;
     this.currentScrollTop = 0;
   }
@@ -59,17 +59,16 @@ class DynamicList extends React.Component {
 
     if (outerScrollTop > this.currentScrollTop) {
       this.currentScrollTop = outerScrollTop;
-      console.log("!!");
-      console.log(
-        `outerScrollHeight:${outerScrollHeight}--${outerScrollTop +
-          outerHeight}`
-      );
       //滚动到底部 渲染操作；
-      if (outerScrollHeight - outerScrollTop - outerHeight < 1) {
+      if (
+        this.state.startIndex < this.props.children.length - 60 &&
+        outerScrollHeight - outerScrollTop - outerHeight < 10
+      ) {
         this.setState({
           startIndex: this.state.startIndex + 30,
           paddingTop: this.state.paddingTop + this.innerRef1.offsetHeight
         });
+        this.heightList.push(this.innerRef1.offsetHeight);
       }
 
       return;
@@ -77,13 +76,16 @@ class DynamicList extends React.Component {
 
     //向上滚动
     this.currentScrollTop = outerScrollTop;
+    // console.log(this.state.startIndex);
+    // console.log(outerScrollTop - this.state.paddingTop);
+    // console.log(this.heightList);
     if (
       this.state.startIndex > 0 &&
       outerScrollTop - this.state.paddingTop < 10
     ) {
       this.setState({
         startIndex: this.state.startIndex - 30,
-        paddingTop: this.state.paddingTop - this.innerRef2.offsetHeight
+        paddingTop: this.state.paddingTop - this.heightList.pop()
       });
     }
   };
